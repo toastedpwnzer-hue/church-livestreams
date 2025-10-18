@@ -5,104 +5,60 @@
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Woodland Forest Church Livestreams</title>
 <style>
-  body {
-    font-family: "Poppins", sans-serif;
-    background: #f5fbf7;
-    color: #2e6047;
-    text-align: center;
-    margin: 0;
-    padding: 25px;
-  }
-
+  body { font-family: "Poppins", sans-serif; background: #f5fbf7; color: #2e6047; text-align: center; margin: 0; padding: 25px; }
   h2 { margin-bottom: 10px; }
-
-  #video-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 14px;
-    margin: 20px 0;
-  }
-
-  .video-btn {
-    background: #e6f2eb;
-    border: none;
-    border-radius: 14px;
-    padding: 8px;
-    cursor: pointer;
-    width: 180px;
-    transition: all .25s ease;
-  }
+  #video-list { display: flex; overflow-x: auto; gap: 14px; padding-bottom: 10px; margin: 20px 0; }
+  .video-btn { background: #e6f2eb; border: none; border-radius: 14px; padding: 8px; cursor: pointer; width: 180px; flex: 0 0 auto; transition: all .25s ease; }
   .video-btn:hover { transform: translateY(-3px); background: #d3ecd9; }
   .video-btn.active { background: #b9dfc4; box-shadow: 0 0 0 3px #2e6047 inset; }
-
   .thumb { width: 100%; border-radius: 10px; }
   .title { font-weight: 600; margin-top: 6px; font-size: .9rem; }
-
-  #player-container {
-    position: relative;
-    padding-bottom: 56.25%;
-    height: 0;
-    overflow: hidden;
-    border-radius: 18px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  }
-
-  iframe {
-    position: absolute;
-    top: 0; left: 0;
-    width: 100%; height: 100%;
-    border: 0;
-  }
-
-  .chat {
-    margin-top: 28px;
-    border-radius: 12px;
-    overflow: hidden;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  }
-
+  #player-container { position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 18px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+  iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0; }
+  .chat { margin-top: 28px; border-radius: 12px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
   footer { margin-top: 35px; font-size: .8rem; color: #4e7e66; }
 </style>
 </head>
 
 <body>
-  <h2>🎥 Woodland Forest Church Livestreams</h2>
-  <div id="video-list">Loading videos...</div>
+<h2>🎥 Woodland Forest Church Livestreams</h2>
+<div id="video-list">Loading videos...</div>
 
-  <div id="player-container">
-    <iframe id="yt-player" allowfullscreen></iframe>
-  </div>
+<div id="player-container">
+  <iframe id="yt-player" allowfullscreen></iframe>
+</div>
 
-  <h3 style="margin-top:28px;">💬 Join the Chat</h3>
-  <div class="chat">
-    <iframe src="https://tlk.io/woodlandforestchurch" width="100%" height="400"></iframe>
-  </div>
+<h3 style="margin-top:28px;">💬 Join the Chat</h3>
+<div class="chat">
+  <iframe src="https://tlk.io/woodlandforestchurch" width="100%" height="400"></iframe>
+</div>
 
-  <footer>© Woodland Forest Church · Powered by YouTube RSS & tlk.io</footer>
+<footer>© Woodland Forest Church · Powered by YouTube RSS & tlk.io</footer>
 
 <script>
-const channelId = "UCfF7HSTeylvLgGzCL_N8y_g"; // Your channel ID
+const channelId = "UCfF7HSTeylvLgGzCL_N8y_g";
 const maxVideos = 5;
 const list = document.getElementById("video-list");
 
 async function loadRSS() {
   try {
-    const res = await fetch(
-      `https://api.rss2json.com/v1/api.json?rss_url=https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`
-    );
+    const rssURL = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
+    const proxyURL = `https://api.allorigins.win/get?url=${encodeURIComponent(rssURL)}`;
+    const res = await fetch(proxyURL);
     const data = await res.json();
-    const items = data.items.slice(0, maxVideos);
+    const parser = new DOMParser();
+    const xmlDoc = parser.parseFromString(data.contents, "text/xml");
+    const entries = Array.from(xmlDoc.getElementsByTagName("entry")).slice(0, maxVideos);
 
     list.innerHTML = "";
-    items.forEach((vid, i) => {
-      const id = vid.link.split("v=")[1];
+    entries.forEach((entry, i) => {
+      const link = entry.getElementsByTagName("link")[0].getAttribute("href");
+      const id = link.split("v=")[1];
+      const title = entry.getElementsByTagName("title")[0].textContent;
+
       const btn = document.createElement("button");
       btn.className = "video-btn" + (i === 0 ? " active" : "");
-      btn.innerHTML = `
-        <img class="thumb" src="https://img.youtube.com/vi/${id}/hqdefault.jpg">
-        <div class="title">${vid.title}</div>
-      `;
+      btn.innerHTML = `<img class="thumb" src="https://img.youtube.com/vi/${id}/hqdefault.jpg"><div class="title">${title}</div>`;
       btn.onclick = () => {
         document.querySelectorAll(".video-btn").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
@@ -118,6 +74,7 @@ async function loadRSS() {
     list.innerHTML = "⚠️ Could not load videos.";
   }
 }
+
 loadRSS();
 </script>
 </body>
