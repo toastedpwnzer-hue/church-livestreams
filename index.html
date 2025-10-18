@@ -147,16 +147,15 @@ const list = document.getElementById("video-list");
 async function loadRSS() {
   try {
     const rssURL = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
-    const proxyURL = `https://api.allorigins.workers.dev/?url=${encodeURIComponent(rssURL)}`;
-    const res = await fetch(proxyURL);
-    const data = await res.json();
+    const res = await fetch(rssURL);
+    const text = await res.text();
     const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(data.contents, "text/xml");
+    const xmlDoc = parser.parseFromString(text, "text/xml");
 
     const allEntries = Array.from(xmlDoc.getElementsByTagName("entry"));
     const liveEntries = allEntries.filter(entry => {
-      const liveStatus = entry.getElementsByTagName("yt:liveBroadcastContent")[0].textContent;
-      return liveStatus === "live";
+      const tag = entry.getElementsByTagName("yt:liveBroadcastContent")[0];
+      return tag && tag.textContent === "live";
     }).slice(0, maxVideos);
 
     if (liveEntries.length === 0) {
