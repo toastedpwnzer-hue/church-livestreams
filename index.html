@@ -147,7 +147,7 @@ const list = document.getElementById("video-list");
 async function loadRSS() {
   try {
     const rssURL = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
-    const proxyURL = `https://api.allorigins.win/get?url=${encodeURIComponent(rssURL)}`;
+    const proxyURL = `https://api.allorigins.workers.dev/?url=${encodeURIComponent(rssURL)}`;
     const res = await fetch(proxyURL);
     const data = await res.json();
     const parser = new DOMParser();
