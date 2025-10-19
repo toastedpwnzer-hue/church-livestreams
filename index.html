@@ -7,39 +7,40 @@
   <style>
     body {
       margin: 0;
-      font-family: 'Segoe UI', Roboto, sans-serif;
-      background: linear-gradient(135deg, #cde9cd, #f5fff5);
+      font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
+      background: #f7fbf7;
       color: #1a331a;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
     }
 
     header {
-      margin-top: 30px;
+      margin: 30px 0 10px;
       text-align: center;
     }
 
     header h1 {
-      font-size: 2em;
+      font-size: 1.8em;
       margin-bottom: 0.2em;
+      color: #284b28;
     }
 
     header p {
-      color: #375937;
+      color: #4a704a;
       font-weight: 500;
+      font-size: 0.95em;
     }
 
     #player-container {
-      width: 90%;
-      max-width: 800px;
+      width: 92%;
+      max-width: 900px;
       aspect-ratio: 16 / 9;
       background: #000;
-      border-radius: 15px;
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-      margin-top: 30px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
+      margin-top: 20px;
     }
 
     #player {
@@ -50,26 +51,26 @@
 
     #gallery {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-      padding: 30px;
-      width: 90%;
-      max-width: 1000px;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 14px;
+      padding: 25px 20px;
+      width: 100%;
+      max-width: 960px;
       box-sizing: border-box;
     }
 
     .video {
-      background: #e6f4e6;
-      border-radius: 15px;
+      background: #ffffff;
+      border-radius: 10px;
       overflow: hidden;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
       cursor: pointer;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
     .video:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
 
     .video img {
@@ -79,20 +80,21 @@
 
     .video-title {
       padding: 10px;
-      font-weight: 600;
+      font-weight: 500;
       text-align: center;
-      color: #244224;
+      color: #2f4f2f;
+      font-size: 0.95em;
     }
 
     #chat-container {
-      background: #e9fce9;
-      border-radius: 15px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      margin: 30px auto 60px;
-      width: 90%;
-      max-width: 800px;
-      height: 500px;
-      padding: 10px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      margin: 20px auto 40px;
+      width: 92%;
+      max-width: 900px;
+      height: 420px;
+      padding: 0;
       overflow: hidden;
     }
 
@@ -101,9 +103,9 @@
     }
 
     footer {
-      color: #3d5f3d;
-      margin-bottom: 20px;
-      font-size: 0.9em;
+      color: #607060;
+      margin-bottom: 25px;
+      font-size: 0.85em;
     }
   </style>
 </head>
@@ -121,7 +123,7 @@
 
   <div id="chat-container"></div>
 
-  <footer>© Woodland Forest Church • Powered by GitHub & Cloudflare</footer>
+  <footer>© Woodland Forest Church • Hosted with ❤️</footer>
 
   <script>
     const workerURL = "https://yellow-salad-c4bb.toastedpwnzer.workers.dev";
@@ -170,10 +172,14 @@
       const iframe = document.getElementById("player");
       iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
 
+      // Clean video ID for Tlk.io (only letters/numbers, lowercase)
+      const cleanId = id.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
+      const chatRoom = `woodlandforest-${cleanId}`;
+
       const chat = document.getElementById("chat-container");
       chat.innerHTML = `
         <iframe 
-          src="https://tlk.io/woodlandforestchurch-${id}" 
+          src="https://tlk.io/${chatRoom}" 
           width="100%" 
           height="100%" 
           frameborder="0"
