@@ -1,199 +1,188 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Woodland Forest Church Livestreams</title>
-<style>
-  body {
-    margin: 0;
-    font-family: "Poppins", sans-serif;
-    background: linear-gradient(135deg, #d8f3dc, #b7e4c7);
-    color: #1b4332;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-  }
-
-  header {
-    text-align: center;
-    padding: 1.5rem;
-  }
-
-  h1 {
-    margin: 0;
-    font-size: 2rem;
-    color: #081c15;
-  }
-
-  #main {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    width: 90%;
-    max-width: 1200px;
-    margin-bottom: 2rem;
-  }
-
-  #player-section {
-    flex: 2 1 600px;
-    display: flex;
-    flex-direction: column;
-    background: #fff;
-    border-radius: 15px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-  }
-
-  #yt-player {
-    width: 100%;
-    height: 400px;
-    border: none;
-  }
-
-  #chat {
-    width: 100%;
-    height: 400px;
-    border: none;
-  }
-
-  #video-list {
-    display: flex;
-    overflow-x: auto;
-    gap: 1rem;
-    padding: 1rem;
-    background: #95d5b2;
-    border-radius: 10px;
-    scroll-behavior: smooth;
-  }
-
-  .video-btn {
-    flex: 0 0 auto;
-    background: #ffffffcc;
-    border: 2px solid transparent;
-    border-radius: 10px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    overflow: hidden;
-    width: 200px;
-    text-align: center;
-  }
-
-  .video-btn.active {
-    border-color: #2d6a4f;
-    box-shadow: 0 0 10px #2d6a4f88;
-  }
-
-  .video-btn:hover {
-    transform: scale(1.05);
-  }
-
-  .thumb {
-    width: 100%;
-    border-radius: 10px 10px 0 0;
-  }
-
-  .title {
-    padding: 0.5rem;
-    font-weight: 500;
-    font-size: 0.9rem;
-  }
-
-  #chat-section {
-    flex: 1 1 350px;
-    background: #ffffffcc;
-    border-radius: 15px;
-    overflow: hidden;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  }
-
-  @media (max-width: 900px) {
-    #main {
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Woodland Forest Church Livestreams</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #cde9cd, #f5fff5);
+      color: #1a331a;
+      display: flex;
       flex-direction: column;
       align-items: center;
+      min-height: 100vh;
     }
-    #yt-player, #chat {
-      height: 300px;
+
+    header {
+      margin-top: 30px;
+      text-align: center;
     }
-  }
-</style>
+
+    header h1 {
+      font-size: 2em;
+      margin-bottom: 0.2em;
+    }
+
+    header p {
+      color: #375937;
+      font-weight: 500;
+    }
+
+    #player-container {
+      width: 90%;
+      max-width: 800px;
+      aspect-ratio: 16 / 9;
+      background: #000;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+      margin-top: 30px;
+    }
+
+    #player {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    #gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      padding: 30px;
+      width: 90%;
+      max-width: 1000px;
+      box-sizing: border-box;
+    }
+
+    .video {
+      background: #e6f4e6;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .video:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+    }
+
+    .video img {
+      width: 100%;
+      display: block;
+    }
+
+    .video-title {
+      padding: 10px;
+      font-weight: 600;
+      text-align: center;
+      color: #244224;
+    }
+
+    #chat-container {
+      background: #e9fce9;
+      border-radius: 15px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      margin: 30px auto 60px;
+      width: 90%;
+      max-width: 800px;
+      height: 500px;
+      padding: 10px;
+      overflow: hidden;
+    }
+
+    iframe {
+      border: none;
+    }
+
+    footer {
+      color: #3d5f3d;
+      margin-bottom: 20px;
+      font-size: 0.9em;
+    }
+  </style>
 </head>
 <body>
+  <header>
+    <h1>Woodland Forest Church Livestreams</h1>
+    <p>Watch, reflect, and share your thoughts</p>
+  </header>
 
-<header>
-  <h1>Woodland Forest Church Livestreams</h1>
-  <p>Watch live and stay connected.</p>
-</header>
-
-<div id="video-list">Loading livestreams...</div>
-
-<div id="main">
-  <div id="player-section">
-    <iframe id="yt-player" allowfullscreen></iframe>
+  <div id="player-container">
+    <iframe id="player" allowfullscreen></iframe>
   </div>
 
-  <div id="chat-section">
-    <iframe id="chat" allowfullscreen></iframe>
-  </div>
-</div>
+  <div id="gallery">Loading livestreams...</div>
 
-<script>
-const channelId = "UCfF7HSTeylvLgGzCL_N8y_g";
-const maxVideos = 5;
-const list = document.getElementById("video-list");
+  <div id="chat-container"></div>
 
-async function loadRSS() {
-  try {
-    const rssURL = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
-    const res = await fetch(rssURL);
-    const text = await res.text();
-    const parser = new DOMParser();
-    const xmlDoc = parser.parseFromString(text, "text/xml");
+  <footer>© Woodland Forest Church • Powered by GitHub & Cloudflare</footer>
 
-    const allEntries = Array.from(xmlDoc.getElementsByTagName("entry"));
-    const liveEntries = allEntries.filter(entry => {
-      const tag = entry.getElementsByTagName("yt:liveBroadcastContent")[0];
-      return tag && tag.textContent === "live";
-    }).slice(0, maxVideos);
+  <script>
+    const workerURL = "https://yellow-salad-c4bb.toastedpwnzer.workers.dev";
+    const channelId = "UCfF7HSTeylvLgGzCL_N8y_g";
 
-    if (liveEntries.length === 0) {
-      list.innerHTML = "⚠️ No live streams at the moment.";
-      document.getElementById("yt-player").src = "";
-      document.getElementById("chat").src = "";
-      return;
+    async function loadVideos() {
+      try {
+        const res = await fetch(`${workerURL}/?channel=${channelId}`);
+        const text = await res.text();
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(text, "text/xml");
+
+        const entries = xml.querySelectorAll("entry");
+        const gallery = document.getElementById("gallery");
+        gallery.innerHTML = "";
+
+        if (entries.length === 0) {
+          gallery.textContent = "No livestreams found.";
+          return;
+        }
+
+        entries.forEach((entry, index) => {
+          const title = entry.querySelector("title").textContent;
+          const link = entry.querySelector("link").getAttribute("href");
+          const videoId = new URL(link).searchParams.get("v");
+          const thumb = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+
+          const videoDiv = document.createElement("div");
+          videoDiv.className = "video";
+          videoDiv.innerHTML = `
+            <img src="${thumb}" alt="${title}" />
+            <div class="video-title">${title}</div>
+          `;
+          videoDiv.onclick = () => playVideo(videoId);
+          gallery.appendChild(videoDiv);
+
+          if (index === 0) playVideo(videoId);
+        });
+      } catch (e) {
+        console.error("Error loading videos:", e);
+        document.getElementById("gallery").textContent = "Could not load videos.";
+      }
     }
 
-    list.innerHTML = "";
-    liveEntries.forEach((entry, i) => {
-      const link = entry.getElementsByTagName("link")[0].getAttribute("href");
-      const id = link.split("v=")[1];
-      const title = entry.getElementsByTagName("title")[0].textContent;
+    function playVideo(id) {
+      const iframe = document.getElementById("player");
+      iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
 
-      const btn = document.createElement("button");
-      btn.className = "video-btn" + (i === 0 ? " active" : "");
-      btn.innerHTML = `<img class="thumb" src="https://img.youtube.com/vi/${id}/hqdefault.jpg"><div class="title">${title}</div>`;
-      btn.onclick = () => {
-        document.querySelectorAll(".video-btn").forEach(b => b.classList.remove("active"));
-        btn.classList.add("active");
-        document.getElementById("yt-player").src = `https://www.youtube.com/embed/${id}?autoplay=1`;
-        document.getElementById("chat").src = `https://www.youtube.com/live_chat?v=${id}&embed_domain=${location.hostname}`;
-      };
-      list.appendChild(btn);
+      const chat = document.getElementById("chat-container");
+      chat.innerHTML = `
+        <iframe 
+          src="https://tlk.io/woodlandforestchurch-${id}" 
+          width="100%" 
+          height="100%" 
+          frameborder="0"
+          style="border-radius:10px;">
+        </iframe>
+      `;
+    }
 
-      if (i === 0) {
-        document.getElementById("yt-player").src = `https://www.youtube.com/embed/${id}?autoplay=1`;
-        document.getElementById("chat").src = `https://www.youtube.com/live_chat?v=${id}&embed_domain=${location.hostname}`;
-      }
-    });
-  } catch (err) {
-    console.error(err);
-    list.innerHTML = "⚠️ Could not load videos.";
-  }
-}
-
-loadRSS();
-</script>
+    loadVideos();
+  </script>
 </body>
 </html>
