@@ -7,40 +7,41 @@
   <style>
     body {
       margin: 0;
-      font-family: 'Inter', 'Segoe UI', Roboto, sans-serif;
-      background: #f7fbf7;
-      color: #1a331a;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(180deg, #dff5df 0%, #f7fff7 100%);
+      color: #203820;
       display: flex;
       flex-direction: column;
       align-items: center;
+      min-height: 100vh;
     }
 
     header {
-      margin: 30px 0 10px;
+      margin-top: 25px;
       text-align: center;
     }
 
     header h1 {
-      font-size: 1.8em;
+      font-size: 2em;
+      color: #204820;
       margin-bottom: 0.2em;
-      color: #284b28;
     }
 
     header p {
-      color: #4a704a;
+      color: #3f603f;
       font-weight: 500;
-      font-size: 0.95em;
+      margin-bottom: 20px;
     }
 
     #player-container {
-      width: 92%;
-      max-width: 900px;
+      width: 90%;
+      max-width: 800px;
       aspect-ratio: 16 / 9;
       background: #000;
-      border-radius: 12px;
+      border-radius: 15px;
       overflow: hidden;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.1);
-      margin-top: 20px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.15);
+      margin-bottom: 25px;
     }
 
     #player {
@@ -50,51 +51,66 @@
     }
 
     #gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      display: flex;
+      overflow-x: auto;
       gap: 14px;
-      padding: 25px 20px;
-      width: 100%;
-      max-width: 960px;
+      padding: 15px 20px;
+      width: 95%;
+      max-width: 850px;
       box-sizing: border-box;
+      scroll-behavior: smooth;
     }
 
     .video {
-      background: #ffffff;
-      border-radius: 10px;
+      background: #e6f5e6;
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
       cursor: pointer;
       transition: transform 0.2s ease, box-shadow 0.2s ease;
+      min-width: 200px;
+      flex-shrink: 0;
     }
 
     .video:hover {
       transform: translateY(-3px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
     }
 
     .video img {
       width: 100%;
+      height: 120px;
+      object-fit: cover;
       display: block;
     }
 
     .video-title {
-      padding: 10px;
+      padding: 8px;
       font-weight: 500;
       text-align: center;
-      color: #2f4f2f;
-      font-size: 0.95em;
+      color: #274827;
+      font-size: 0.9em;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #8dd88d;
+      color: #fff;
+      font-weight: 600;
+      border-radius: 8px;
+      padding: 2px 8px;
+      font-size: 0.75em;
+      margin-bottom: 6px;
     }
 
     #chat-container {
-      background: #fff;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-      margin: 20px auto 40px;
-      width: 92%;
-      max-width: 900px;
-      height: 420px;
-      padding: 0;
+      background: #ebf9eb;
+      border-radius: 15px;
+      box-shadow: 0 3px 12px rgba(0,0,0,0.08);
+      margin: 25px auto 50px;
+      width: 90%;
+      max-width: 800px;
+      height: 480px;
       overflow: hidden;
     }
 
@@ -103,9 +119,14 @@
     }
 
     footer {
-      color: #607060;
-      margin-bottom: 25px;
-      font-size: 0.85em;
+      color: #506b50;
+      margin-bottom: 20px;
+      font-size: 0.9em;
+    }
+
+    @media (max-width: 600px) {
+      .video img { height: 100px; }
+      .video { min-width: 160px; }
     }
   </style>
 </head>
@@ -148,14 +169,21 @@
         entries.forEach((entry, index) => {
           const title = entry.querySelector("title").textContent;
           const link = entry.querySelector("link").getAttribute("href");
+          const published = new Date(entry.querySelector("published").textContent);
           const videoId = new URL(link).searchParams.get("v");
           const thumb = `https://img.youtube.com/vi/${videoId}/hqdefault.jpg`;
+
+          // Format date to something like "Oct 13, 2025"
+          const dateStr = published.toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
+
+          const tag = index === 0 ? `<div class="tag">This Week’s Worship</div>` : "";
 
           const videoDiv = document.createElement("div");
           videoDiv.className = "video";
           videoDiv.innerHTML = `
+            ${tag}
             <img src="${thumb}" alt="${title}" />
-            <div class="video-title">${title}</div>
+            <div class="video-title">${title}<br><small>${dateStr}</small></div>
           `;
           videoDiv.onclick = () => playVideo(videoId);
           gallery.appendChild(videoDiv);
@@ -172,7 +200,7 @@
       const iframe = document.getElementById("player");
       iframe.src = `https://www.youtube.com/embed/${id}?autoplay=1`;
 
-      // Clean video ID for Tlk.io (only letters/numbers, lowercase)
+      // Sanitize video ID for Tlk.io
       const cleanId = id.replace(/[^a-zA-Z0-9]/g, "").toLowerCase();
       const chatRoom = `woodlandforest-${cleanId}`;
 
